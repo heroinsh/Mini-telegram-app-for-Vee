@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سرویس های Vee</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        /* تنظیمات کلی */
+        :root {
+            --primary-color: #007bff;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: white;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+            --icon-color: #6d8bf0;
+            --icon-hover-color: #6c757d;
+            --scrollbar-thumb: #007bff;
+            --scrollbar-track: #f1f1f1;
+            --select-bg: var(--card-bg);
+            --select-color: var(--text-color);
+            --select-border: var(--primary-color);
+        }
+
+        /* تم دارک */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #1a1a1a;
+                --text-color: #f8f9fa;
+                --card-bg: #2d2d2d;
+                --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                --primary-color: #1e90ff;
+                --success-color: #32cd32;
+                --danger-color: #ff4500;
+                --icon-color: #89c4f4;
+                --icon-hover-color: #adb5bd;
+                --scrollbar-thumb: #1e90ff;
+                --scrollbar-track: #2d2d2d;
+                --select-bg: #2d2d2d;
+                --select-color: #f8f9fa;
+                --select-border: #1e90ff;
+            }
+        }
+
+        /* حالت اولیه: اسکرول بار غیرفعال */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazir', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            overflow: hidden; /* اسکرول بار غیرفعال */
+        }
+
+        /* فعال‌سازی اسکرول بار در صفحه اصلی */
+        body.show-scroll {
+            overflow-y: auto; /* اسکرول بار در صورت نیاز */
+        }
+
+        /* استایل‌دهی به اسکرول بار */
+        body::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 10px;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 10px;
+            border: 3px solid var(--scrollbar-track);
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+        }
+
+        /* صفحه انتخاب دستگاه (بدون اسکرول بار) */
+        .service-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        /* نوبار بالای صفحه */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), #0056b3);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none; /* ابتدا نوبار مخفی است */
+        }
+
+        .navbar .logo {
+            position: absolute;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar .logo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .navbar .content {
+            text-align: center;
+        }
+
+        .navbar h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .price-info {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+            color: #fff;
+        }
+
+        /* محتوای اصلی */
+        .main-content {
+            padding: 100px 20px 120px;
+            max-width: 800px;
+            margin: 0 auto;
+            direction: rtl;
+            text-align: right;
+            display: none; /* ابتدا محتوا مخفی است */
+        }
+
+        /* استایل قوانین */
+        .rule-item {
+            padding: 20px;
+            margin-bottom: 15px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            direction: rtl;
+            text-align: right;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .rule-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .rule-item .icon {
+            font-size: 24px;
+            color: var(--icon-color);
+            margin-left: 15px;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+
+        .rule-item strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .rule-item p {
+            margin: 0;
+            line-height: 1.8;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        /* دکمه‌ها */
+        .btn-telegram {
+            background: linear-gradient(135deg, #0088cc, #005f8b);
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            transition: opacity 0.3s ease;
+            width: 100%;
+            color: white;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: 10px; /* فاصله بین دکمه‌ها */
+        }
+
+        .btn-telegram:hover {
+            opacity: 0.9;
+        }
+
+        .btn-channel {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            transition: opacity 0.3s ease;
+            width: 100%;
+            color: white;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: 10px; /* فاصله بین دکمه‌ها */
+        }
+
+        .btn-channel:hover {
+            opacity: 0.9;
+        }
+
+        .btn-support {
+            background: linear-gradient(135deg, #FF5733, #C70039);
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            transition: opacity 0.3s ease;
+            width: 100%;
+            color: white;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: 10px; /* فاصله بین دکمه‌ها */
+        }
+
+        .btn-support:hover {
+            opacity: 0.9;
+        }
+
+        /* تنظیمات موبایل */
+        @media (max-width: 768px) {
+            .navbar h3 {
+                font-size: 18px;
+            }
+
+            .navbar .price-info {
+                font-size: 12px;
+            }
+
+            .navbar .logo {
+                width: 30px;
+                height: 30px;
+                right: 10px;
+            }
+
+            .main-content {
+                padding: 80px 15px 100px;
+            }
+
+            .rule-item {
+                padding: 15px;
+            }
+
+            .rule-item .icon {
+                font-size: 20px;
+                margin-left: 10px;
+            }
+
+            .rule-item strong {
+                font-size: 16px;
+            }
+
+            .rule-item p {
+                font-size: 12px;
+            }
+
+            .btn-telegram, .btn-channel, .btn-support {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+        }
+
+        /* استایل لیست‌ها و دکمه‌ها */
+        select {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--select-border);
+            margin-bottom: 20px;
+            background-color: var(--select-bg);
+            color: var(--select-color);
+            cursor: pointer;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+
+        .btn-confirm {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto; /* قرار دادن دکمه در وسط */
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* بهبود استایل لیست‌ها */
+        .rule-item ol, .rule-item ul {
+            padding-right: 20px;
+            margin: 10px 0;
+        }
+
+        .rule-item li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- نوبار بالای صفحه -->
+    <div class="navbar" id="navbar">
+        <div class="logo">
+            <img src="https://via.placeholder.com/40" alt="لوگوی سایت">
+        </div>
+        <div class="content">
+            <h3>سرویس های Vee</h3>
+            <div class="price-info" id="priceInfo"></div>
+        </div>
+    </div>
+
+    <!-- صفحه انتخاب سرویس -->
+    <div class="service-selection" id="serviceSelection">
+        <select id="serviceType">
+            <option value="" disabled selected>انتخاب کنید نوع سرویس را</option>
+            <option value="dns">DNS</option>
+            <option value="vpn">VPN</option>
+        </select>
+        <button class="btn-confirm" id="confirmService">تأیید</button>
+    </div>
+
+    <!-- محتوای اصلی (پس از انتخاب سرویس) -->
+    <div class="main-content" id="mainContent">
+        <!-- صفحه انتخاب لوکیشن DNS -->
+        <div id="dnsLocationSelection" style="display: none;">
+            <div class="rule-item">
+                <iconify-icon class="icon" icon="mdi:earth"></iconify-icon>
+                <div>
+                    <strong>انتخاب لوکیشن DNS:</strong>
+                    <p>لطفاً لوکیشن DNS خود را انتخاب کنید.</p>
+                </div>
+            </div>
+            <div class="rule-item">
+                <select id="dnsLocation">
+                    <option value="" disabled selected>انتخاب کنید لوکیشن را</option>
+                    <option value="germany">آلمان - ۱۲۰ هزار تومان</option>
+                    <option value="uae">امارات - ۱۴۰ هزار تومان</option>
+                    <option value="normal">نرمال - ۹۰ هزار تومان</option>
+                </select>
+            </div>
+            <button class="btn-confirm" id="confirmDnsLocation">تأیید</button>
+        </div>
+
+        <!-- صفحه توضیحات نحوه خرید و استفاده از DNS -->
+        <div id="dnsUsageInstructions" style="display: none;">
+            <div class="rule-item">
+                <iconify-icon class="icon" icon="mdi:information"></iconify-icon>
+                <div>
+                    <strong>نحوه خرید از پشتیبان:</strong>
+                    <p>برای خرید DNS، با پشتیبان ما در تلگرام تماس بگیرید:</p>
+                    <ol>
+                        <li>به آیدی @YourSupportId در تلگرام مراجعه کنید.</li>
+                        <li>لوکیشن انتخابی خود را به پشتیبان اعلام کنید.</li>
+                        <li>پس از پرداخت، اطلاعات DNS برای شما ارسال خواهد شد.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="rule-item">
+                <iconify-icon class="icon" icon="mdi:settings"></iconify-icon>
+                <div>
+                    <strong>نحوه استفاده از DNS:</strong>
+                    <p>برای استفاده از DNS، مراحل زیر را دنبال کنید:</p>
+                    <ol>
+                        <li>Dns changer رو نصب کنید (فرقی نمیکنه دستگاهتون چی هست Android یا IOS).</li>
+                        <li>سپس وارد برنامه بشید و کد هایی که بهتون داده شده رو وارد کنید.</li>
+                    </ol>
+                </div>
+            </div>
+            <button class="btn-telegram" id="goToSupport">رفتن به ربات تلگرام</button>
+            <button class="btn-channel" id="goToChannel">رفتن به کانال تلگرام</button>
+            <button class="btn-support" id="goToSupportChat">چت با پشتیبانی</button>
+        </div>
+
+        <!-- صفحه انتخاب مدت زمان VPN -->
+        <div id="vpnDurationSelection" style="display: none;">
+            <div class="rule-item">
+                <iconify-icon class="icon" icon="mdi:calendar"></iconify-icon>
+                <div>
+                    <strong>انتخاب مدت زمان کانفیگ VPN:</strong>
+                    <p>لطفاً مدت زمان کانفیگ VPN خود را انتخاب کنید.</p>
+                </div>
+            </div>
+            <div class="rule-item">
+                <select id="vpnDuration">
+                    <option value="" disabled selected>انتخاب کنید مدت زمان را</option>
+                    <option value="1month">یک ماهه</option>
+                    <option value="3months">سه ماهه</option>
+                </select>
+            </div>
+            <button class="btn-confirm" id="confirmVpnDuration">تأیید</button>
+        </div>
+
+        <!-- صفحه انتخاب حجم VPN -->
+        <div id="vpnVolumeSelection" style="display: none;">
+            <div class="rule-item">
+                <iconify-icon class="icon" icon="mdi:database"></iconify-icon>
+                <div>
+                    <strong>انتخاب حجم کانفیگ VPN:</strong>
+                    <p>لطفاً حجم کانفیگ VPN خود را انتخاب کنید.</p>
+                </div>
+            </div>
+            <div class="rule-item">
+                <select id="vpnVolume">
+                    <!-- این قسمت به‌صورت پویا پر می‌شود -->
+                </select>
+            </div>
+            <button class="btn-confirm" id="confirmVpnVolume">تأیید</button>
+        </div>
+
+        <!-- صفحه توضیحات نحوه خرید و استفاده از VPN -->
+        <div id="vpnUsageInstructions" style="display: none;">
+            <div class="rule-item">
+                <iconify-icon class="icon" icon="mdi:information"></iconify-icon>
+                <div>
+                    <strong>نحوه خرید از ربات:</strong>
+                    <p>برای خرید VPN از ربات، مراحل زیر را دنبال کنید:</p>
+                    <ol>
+                        <li>ربات رو استارت کنید.</li>
+                        <li>خرید اشتراک رو بزنید.</li>
+                        <li>مدت زمان کانفیگ رو انتخاب کنید.</li>
+                        <li>حجم کانفیگ رو انتخاب کنید.</li>
+                        <li>اگر کد تخفیف دارید، ثبت کد تخفیف رو بزنید و کد تخفیف وارد کنید.</li>
+                        <li>در غیر این صورت، پرداخت و دریافت سرویس رو بزنید.</li>
+                        <li>اگر کیف پول رو شارژ کردید، برداشت میشه و کانفیگ بهتون داده میشه.</li>
+                        <li>اگر نکردید، کارت به کارت رو بزنید و مبلغ رو واریز کنید.</li>
+                        <li>سپس فیش واریزی رو بفرستید و منتظر تایید توسط ادمین و ارسال کانفیگ براتون باشید.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="rule-item">
+                <iconify-icon class="icon" icon="mdi:settings"></iconify-icon>
+                <div>
+                    <strong>نحوه استفاده از VPN:</strong>
+                    <p>برای استفاده از VPN، مراحل زیر را دنبال کنید:</p>
+                    <ol>
+                        <li>اول از ربات ما کانفیگ خود را خریداری و کپی کنید.</li>
+                        <li>اپلیکشن هیدفای (Hiddify) رو نصب کنید سپس وارد برنامه بشید.</li>
+                        <li>سپس در این مرحله روی "افزودن پروفایل جدید" کلیک کنید.</li>
+                        <li>سپس روی "افزودن از کلیپ بورد" کلیک کنید.</li>
+                        <li>🎉✅تبریک میگویم کانفیگ شما اکنون در هیدیفای ثبت شده و آماده استفاده هست.</li>
+                    </ol>
+                </div>
+            </div>
+            <button class="btn-telegram" id="goToVpnSupport">رفتن به ربات تلگرام</button>
+            <button class="btn-channel" id="goToVpnChannel">رفتن به کانال تلگرام</button>
+            <button class="btn-support" id="goToVpnSupportChat">چت با پشتیبانی</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const serviceSelection = document.getElementById('serviceSelection');
+            const mainContent = document.getElementById('mainContent');
+            const navbar = document.getElementById('navbar');
+            const priceInfo = document.getElementById('priceInfo');
+            const confirmServiceBtn = document.getElementById('confirmService');
+            const serviceTypeSelect = document.getElementById('serviceType');
+            const dnsLocationSelection = document.getElementById('dnsLocationSelection');
+            const dnsUsageInstructions = document.getElementById('dnsUsageInstructions');
+            const confirmDnsLocationBtn = document.getElementById('confirmDnsLocation');
+            const dnsLocationSelect = document.getElementById('dnsLocation');
+            const goToSupportBtn = document.getElementById('goToSupport');
+            const goToChannelBtn = document.getElementById('goToChannel');
+            const goToSupportChatBtn = document.getElementById('goToSupportChat');
+            const vpnDurationSelection = document.getElementById('vpnDurationSelection');
+            const vpnVolumeSelection = document.getElementById('vpnVolumeSelection');
+            const vpnUsageInstructions = document.getElementById('vpnUsageInstructions');
+            const confirmVpnDurationBtn = document.getElementById('confirmVpnDuration');
+            const confirmVpnVolumeBtn = document.getElementById('confirmVpnVolume');
+            const goToVpnSupportBtn = document.getElementById('goToVpnSupport');
+            const goToVpnChannelBtn = document.getElementById('goToVpnChannel');
+            const goToVpnSupportChatBtn = document.getElementById('goToVpnSupportChat');
+            const vpnDurationSelect = document.getElementById('vpnDuration');
+            const vpnVolumeSelect = document.getElementById('vpnVolume');
+            const body = document.body;
+
+            // حجم‌ها و قیمت‌های مربوط به یک‌ماهه و سه‌ماهه
+            const vpnPlans = {
+                "1month": [
+                    { volume: "📅 یک ماهه: 5️⃣ گیگ", price: "۹ هزار تومان" },
+                    { volume: "📅 یک ماهه: 0️⃣1️⃣ گیگ", price: "۱۸ هزار تومان" },
+                    { volume: "📅 یک ماهه: 0️⃣2️⃣ گیگ", price: "۳۰ هزار تومان" },
+                    { volume: "📅 یک ماهه: 0️⃣3️⃣ گیگ", price: "۳۸ هزار تومان" },
+                    { volume: "📅 یک ماهه: 0️⃣4️⃣ گیگ", price: "۴۶ هزار تومان" },
+                    { volume: "📅 یک ماهه: 0️⃣5️⃣ گیگ", price: "۵۷ هزار تومان" },
+                    { volume: "📅 یک ماهه: 🌐 نامحدود", price: "۱۹۲ هزار تومان" }
+                ],
+                "3months": [
+                    { volume: "📅 سه ماهه: 0️⃣3️⃣ گیگ", price: "۵۳ هزار تومان" },
+                    { volume: "📅 سه ماهه: 0️⃣4️⃣ گیگ", price: "۶۳ هزار تومان" },
+                    { volume: "📅 سه ماهه: 0️⃣5️⃣ گیگ", price: "۷۹ هزار تومان" },
+                    { volume: "📅 سه ماهه: 0️⃣6️⃣ گیگ", price: "۸۵ هزار تومان" },
+                    { volume: "📅 سه ماهه: 5️⃣7️⃣ گیگ", price: "۱۰۲ هزار تومان" },
+                    { volume: "📅 سه ماهه: 🌐 نامحدود", price: "۶۳۹ هزار تومان" }
+                ]
+            };
+
+            // نمایش صفحه انتخاب لوکیشن DNS یا مدت زمان VPN پس از انتخاب سرویس
+            confirmServiceBtn.addEventListener('click', function () {
+                const selectedService = serviceTypeSelect.value;
+                if (selectedService) {
+                    serviceSelection.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    navbar.style.display = 'flex';
+                    body.classList.add('show-scroll'); // فعال‌سازی اسکرول بار
+
+                    if (selectedService === 'dns') {
+                        dnsLocationSelection.style.display = 'block';
+                        dnsUsageInstructions.style.display = 'none';
+                        vpnDurationSelection.style.display = 'none';
+                        vpnVolumeSelection.style.display = 'none';
+                        vpnUsageInstructions.style.display = 'none';
+                    } else if (selectedService === 'vpn') {
+                        dnsLocationSelection.style.display = 'none';
+                        dnsUsageInstructions.style.display = 'none';
+                        vpnDurationSelection.style.display = 'block';
+                        vpnVolumeSelection.style.display = 'none';
+                        vpnUsageInstructions.style.display = 'none';
+                    }
+                } else {
+                    alert('لطفاً نوع سرویس خود را انتخاب کنید.');
+                }
+            });
+
+            // نمایش صفحه انتخاب حجم VPN پس از انتخاب مدت زمان
+            confirmVpnDurationBtn.addEventListener('click', function () {
+                const selectedDuration = vpnDurationSelect.value;
+                if (selectedDuration) {
+                    vpnDurationSelection.style.display = 'none';
+                    vpnVolumeSelection.style.display = 'block';
+
+                    // پاک کردن گزینه‌های قبلی
+                    vpnVolumeSelect.innerHTML = '<option value="" disabled selected>انتخاب کنید حجم را</option>';
+
+                    // اضافه کردن گزینه‌های جدید بر اساس مدت زمان انتخاب‌شده
+                    vpnPlans[selectedDuration].forEach(plan => {
+                        const option = document.createElement('option');
+                        option.value = plan.volume;
+                        option.textContent = `${plan.volume} ➜ ${plan.price}`; // اضافه کردن ایموجی و قیمت
+                        vpnVolumeSelect.appendChild(option);
+                    });
+                } else {
+                    alert('لطفاً مدت زمان کانفیگ را انتخاب کنید.');
+                }
+            });
+
+            // نمایش صفحه توضیحات نحوه استفاده از VPN پس از انتخاب حجم
+            confirmVpnVolumeBtn.addEventListener('click', function () {
+                const selectedVolume = vpnVolumeSelect.value;
+                if (selectedVolume) {
+                    vpnVolumeSelection.style.display = 'none';
+                    vpnUsageInstructions.style.display = 'block';
+                } else {
+                    alert('لطفاً حجم کانفیگ را انتخاب کنید.');
+                }
+            });
+
+            // نمایش صفحه توضیحات نحوه خرید و استفاده از DNS پس از انتخاب لوکیشن
+            confirmDnsLocationBtn.addEventListener('click', function () {
+                const selectedLocation = dnsLocationSelect.value;
+                if (selectedLocation) {
+                    dnsLocationSelection.style.display = 'none';
+                    dnsUsageInstructions.style.display = 'block';
+                } else {
+                    alert('لطفاً لوکیشن DNS را انتخاب کنید.');
+                }
+            });
+
+            // هدایت کاربر به ربات تلگرام و بستن مینی‌اپ
+            function goToTelegram(url) {
+                Telegram.WebApp.openTelegramLink(url); // باز کردن لینک ربات در تلگرام
+                Telegram.WebApp.close(); // بستن مینی‌اپ
+            }
+
+            // اضافه کردن رویداد به دکمه‌ها
+            goToSupportBtn.addEventListener('click', () => goToTelegram('https://t.me/vee_config_bot'));
+            goToChannelBtn.addEventListener('click', () => goToTelegram('https://t.me/IR_KING_CHANEL'));
+            goToSupportChatBtn.addEventListener('click', () => goToTelegram('https://t.me/Vee_support'));
+            goToVpnSupportBtn.addEventListener('click', () => goToTelegram('https://t.me/vee_config_bot'));
+            goToVpnChannelBtn.addEventListener('click', () => goToTelegram('https://t.me/IR_KING_CHANEL'));
+            goToVpnSupportChatBtn.addEventListener('click', () => goToTelegram('https://t.me/Vee_support'));
+        });
+    </script>
+</body>
+</html>
