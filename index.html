@@ -503,139 +503,143 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const serviceSelection = document.getElementById('serviceSelection');
-            const mainContent = document.getElementById('mainContent');
-            const navbar = document.getElementById('navbar');
-            const priceInfo = document.getElementById('priceInfo');
-            const confirmServiceBtn = document.getElementById('confirmService');
-            const serviceTypeSelect = document.getElementById('serviceType');
-            const dnsLocationSelection = document.getElementById('dnsLocationSelection');
-            const dnsUsageInstructions = document.getElementById('dnsUsageInstructions');
-            const confirmDnsLocationBtn = document.getElementById('confirmDnsLocation');
-            const dnsLocationSelect = document.getElementById('dnsLocation');
-            const goToSupportBtn = document.getElementById('goToSupport');
-            const goToChannelBtn = document.getElementById('goToChannel');
-            const goToSupportChatBtn = document.getElementById('goToSupportChat');
-            const vpnDurationSelection = document.getElementById('vpnDurationSelection');
-            const vpnVolumeSelection = document.getElementById('vpnVolumeSelection');
-            const vpnUsageInstructions = document.getElementById('vpnUsageInstructions');
-            const confirmVpnDurationBtn = document.getElementById('confirmVpnDuration');
-            const confirmVpnVolumeBtn = document.getElementById('confirmVpnVolume');
-            const goToVpnSupportBtn = document.getElementById('goToVpnSupport');
-            const goToVpnChannelBtn = document.getElementById('goToVpnChannel');
-            const goToVpnSupportChatBtn = document.getElementById('goToVpnSupportChat');
-            const vpnDurationSelect = document.getElementById('vpnDuration');
-            const vpnVolumeSelect = document.getElementById('vpnVolume');
-            const body = document.body;
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const serviceSelection = document.getElementById('serviceSelection');
+        const mainContent = document.getElementById('mainContent');
+        const navbar = document.getElementById('navbar');
+        const priceInfo = document.getElementById('priceInfo');
+        const confirmServiceBtn = document.getElementById('confirmService');
+        const serviceTypeSelect = document.getElementById('serviceType');
+        const dnsLocationSelection = document.getElementById('dnsLocationSelection');
+        const dnsUsageInstructions = document.getElementById('dnsUsageInstructions');
+        const confirmDnsLocationBtn = document.getElementById('confirmDnsLocation');
+        const dnsLocationSelect = document.getElementById('dnsLocation');
+        const goToSupportBtn = document.getElementById('goToSupport');
+        const goToChannelBtn = document.getElementById('goToChannel');
+        const goToSupportChatBtn = document.getElementById('goToSupportChat');
+        const vpnDurationSelection = document.getElementById('vpnDurationSelection');
+        const vpnVolumeSelection = document.getElementById('vpnVolumeSelection');
+        const vpnUsageInstructions = document.getElementById('vpnUsageInstructions');
+        const confirmVpnDurationBtn = document.getElementById('confirmVpnDuration');
+        const confirmVpnVolumeBtn = document.getElementById('confirmVpnVolume');
+        const goToVpnSupportBtn = document.getElementById('goToVpnSupport');
+        const goToVpnChannelBtn = document.getElementById('goToVpnChannel');
+        const goToVpnSupportChatBtn = document.getElementById('goToVpnSupportChat');
+        const vpnDurationSelect = document.getElementById('vpnDuration');
+        const vpnVolumeSelect = document.getElementById('vpnVolume');
+        const body = document.body;
 
-            // حجم‌ها و قیمت‌های مربوط به یک‌ماهه و سه‌ماهه
-            const vpnPlans = {
-                "1month": [
-                    { volume: "📅 یک ماهه: 5️⃣ گیگ", price: "۹ هزار تومان" },
-                    { volume: "📅 یک ماهه: 0️⃣1️⃣ گیگ", price: "۱۸ هزار تومان" },
-                    { volume: "📅 یک ماهه: 0️⃣2️⃣ گیگ", price: "۳۰ هزار تومان" },
-                    { volume: "📅 یک ماهه: 0️⃣3️⃣ گیگ", price: "۳۸ هزار تومان" },
-                    { volume: "📅 یک ماهه: 0️⃣4️⃣ گیگ", price: "۴۶ هزار تومان" },
-                    { volume: "📅 یک ماهه: 0️⃣5️⃣ گیگ", price: "۵۷ هزار تومان" },
-                    { volume: "📅 یک ماهه: 🌐 نامحدود", price: "۱۹۲ هزار تومان" }
-                ],
-                "3months": [
-                    { volume: "📅 سه ماهه: 0️⃣3️⃣ گیگ", price: "۵۳ هزار تومان" },
-                    { volume: "📅 سه ماهه: 0️⃣4️⃣ گیگ", price: "۶۳ هزار تومان" },
-                    { volume: "📅 سه ماهه: 0️⃣5️⃣ گیگ", price: "۷۹ هزار تومان" },
-                    { volume: "📅 سه ماهه: 0️⃣6️⃣ گیگ", price: "۸۵ هزار تومان" },
-                    { volume: "📅 سه ماهه: 5️⃣7️⃣ گیگ", price: "۱۰۲ هزار تومان" },
-                    { volume: "📅 سه ماهه: 🌐 نامحدود", price: "۶۳۹ هزار تومان" }
-                ]
-            };
+        // حجم‌ها و قیمت‌های مربوط به یک‌ماهه و سه‌ماهه
+        const vpnPlans = {
+            "1month": [
+                { volume: "📅 یک ماهه: 5️⃣ گیگ", price: "۹ هزار تومان" },
+                { volume: "📅 یک ماهه: 0️⃣1️⃣ گیگ", price: "۱۸ هزار تومان" },
+                { volume: "📅 یک ماهه: 0️⃣2️⃣ گیگ", price: "۳۰ هزار تومان" },
+                { volume: "📅 یک ماهه: 0️⃣3️⃣ گیگ", price: "۳۸ هزار تومان" },
+                { volume: "📅 یک ماهه: 0️⃣4️⃣ گیگ", price: "۴۶ هزار تومان" },
+                { volume: "📅 یک ماهه: 0️⃣5️⃣ گیگ", price: "۵۷ هزار تومان" },
+                { volume: "📅 یک ماهه: 🌐 نامحدود", price: "۱۹۲ هزار تومان" }
+            ],
+            "3months": [
+                { volume: "📅 سه ماهه: 0️⃣3️⃣ گیگ", price: "۵۳ هزار تومان" },
+                { volume: "📅 سه ماهه: 0️⃣4️⃣ گیگ", price: "۶۳ هزار تومان" },
+                { volume: "📅 سه ماهه: 0️⃣5️⃣ گیگ", price: "۷۹ هزار تومان" },
+                { volume: "📅 سه ماهه: 0️⃣6️⃣ گیگ", price: "۸۵ هزار تومان" },
+                { volume: "📅 سه ماهه: 5️⃣7️⃣ گیگ", price: "۱۰۲ هزار تومان" },
+                { volume: "📅 سه ماهه: 🌐 نامحدود", price: "۶۳۹ هزار تومان" }
+            ]
+        };
 
-            // نمایش صفحه انتخاب لوکیشن DNS یا مدت زمان VPN پس از انتخاب سرویس
-            confirmServiceBtn.addEventListener('click', function () {
-                const selectedService = serviceTypeSelect.value;
-                if (selectedService) {
-                    serviceSelection.style.display = 'none';
-                    mainContent.style.display = 'block';
-                    navbar.style.display = 'flex';
-                    body.classList.add('show-scroll'); // فعال‌سازی اسکرول بار
+        // نمایش صفحه انتخاب لوکیشن DNS یا مدت زمان VPN پس از انتخاب سرویس
+        confirmServiceBtn.addEventListener('click', function () {
+            const selectedService = serviceTypeSelect.value;
+            if (selectedService) {
+                serviceSelection.style.display = 'none';
+                mainContent.style.display = 'block';
+                navbar.style.display = 'flex';
+                body.classList.add('show-scroll'); // فعال‌سازی اسکرول بار
 
-                    if (selectedService === 'dns') {
-                        dnsLocationSelection.style.display = 'block';
-                        dnsUsageInstructions.style.display = 'none';
-                        vpnDurationSelection.style.display = 'none';
-                        vpnVolumeSelection.style.display = 'none';
-                        vpnUsageInstructions.style.display = 'none';
-                    } else if (selectedService === 'vpn') {
-                        dnsLocationSelection.style.display = 'none';
-                        dnsUsageInstructions.style.display = 'none';
-                        vpnDurationSelection.style.display = 'block';
-                        vpnVolumeSelection.style.display = 'none';
-                        vpnUsageInstructions.style.display = 'none';
-                    }
-                } else {
-                    alert('لطفاً نوع سرویس خود را انتخاب کنید.');
-                }
-            });
-
-            // نمایش صفحه انتخاب حجم VPN پس از انتخاب مدت زمان
-            confirmVpnDurationBtn.addEventListener('click', function () {
-                const selectedDuration = vpnDurationSelect.value;
-                if (selectedDuration) {
+                if (selectedService === 'dns') {
+                    dnsLocationSelection.style.display = 'block';
+                    dnsUsageInstructions.style.display = 'none';
                     vpnDurationSelection.style.display = 'none';
-                    vpnVolumeSelection.style.display = 'block';
-
-                    // پاک کردن گزینه‌های قبلی
-                    vpnVolumeSelect.innerHTML = '<option value="" disabled selected>انتخاب کنید حجم را</option>';
-
-                    // اضافه کردن گزینه‌های جدید بر اساس مدت زمان انتخاب‌شده
-                    vpnPlans[selectedDuration].forEach(plan => {
-                        const option = document.createElement('option');
-                        option.value = plan.volume;
-                        option.textContent = `${plan.volume} ➜ ${plan.price}`; // اضافه کردن ایموجی و قیمت
-                        vpnVolumeSelect.appendChild(option);
-                    });
-                } else {
-                    alert('لطفاً مدت زمان کانفیگ را انتخاب کنید.');
-                }
-            });
-
-            // نمایش صفحه توضیحات نحوه استفاده از VPN پس از انتخاب حجم
-            confirmVpnVolumeBtn.addEventListener('click', function () {
-                const selectedVolume = vpnVolumeSelect.value;
-                if (selectedVolume) {
                     vpnVolumeSelection.style.display = 'none';
-                    vpnUsageInstructions.style.display = 'block';
-                } else {
-                    alert('لطفاً حجم کانفیگ را انتخاب کنید.');
-                }
-            });
-
-            // نمایش صفحه توضیحات نحوه خرید و استفاده از DNS پس از انتخاب لوکیشن
-            confirmDnsLocationBtn.addEventListener('click', function () {
-                const selectedLocation = dnsLocationSelect.value;
-                if (selectedLocation) {
+                    vpnUsageInstructions.style.display = 'none';
+                } else if (selectedService === 'vpn') {
                     dnsLocationSelection.style.display = 'none';
-                    dnsUsageInstructions.style.display = 'block';
-                } else {
-                    alert('لطفاً لوکیشن DNS را انتخاب کنید.');
+                    dnsUsageInstructions.style.display = 'none';
+                    vpnDurationSelection.style.display = 'block';
+                    vpnVolumeSelection.style.display = 'none';
+                    vpnUsageInstructions.style.display = 'none';
                 }
-            });
-
-            // هدایت کاربر به ربات تلگرام و بستن مینی‌اپ
-            function goToTelegram(url) {
-                Telegram.WebApp.openTelegramLink(url); // باز کردن لینک ربات در تلگرام
-                Telegram.WebApp.close(); // بستن مینی‌اپ
+            } else {
+                alert('لطفاً نوع سرویس خود را انتخاب کنید.');
             }
-
-            // اضافه کردن رویداد به دکمه‌ها
-            goToSupportBtn.addEventListener('click', () => goToTelegram('https://t.me/vee_config_bot'));
-            goToChannelBtn.addEventListener('click', () => goToTelegram('https://t.me/IR_KING_CHANEL'));
-            goToSupportChatBtn.addEventListener('click', () => goToTelegram('https://t.me/Vee_support'));
-            goToVpnSupportBtn.addEventListener('click', () => goToTelegram('https://t.me/vee_config_bot'));
-            goToVpnChannelBtn.addEventListener('click', () => goToTelegram('https://t.me/IR_KING_CHANEL'));
-            goToVpnSupportChatBtn.addEventListener('click', () => goToTelegram('https://t.me/Vee_support'));
         });
-    </script>
+
+        // نمایش صفحه انتخاب حجم VPN پس از انتخاب مدت زمان
+        confirmVpnDurationBtn.addEventListener('click', function () {
+            const selectedDuration = vpnDurationSelect.value;
+            if (selectedDuration) {
+                vpnDurationSelection.style.display = 'none';
+                vpnVolumeSelection.style.display = 'block';
+
+                // پاک کردن گزینه‌های قبلی
+                vpnVolumeSelect.innerHTML = '<option value="" disabled selected>انتخاب کنید حجم را</option>';
+
+                // اضافه کردن گزینه‌های جدید بر اساس مدت زمان انتخاب‌شده
+                vpnPlans[selectedDuration].forEach(plan => {
+                    const option = document.createElement('option');
+                    option.value = plan.volume;
+                    option.textContent = `${plan.volume} ➜ ${plan.price}`; // اضافه کردن ایموجی و قیمت
+                    vpnVolumeSelect.appendChild(option);
+                });
+            } else {
+                alert('لطفاً مدت زمان کانفیگ را انتخاب کنید.');
+            }
+        });
+
+        // نمایش صفحه توضیحات نحوه استفاده از VPN پس از انتخاب حجم
+        confirmVpnVolumeBtn.addEventListener('click', function () {
+            const selectedVolume = vpnVolumeSelect.value;
+            if (selectedVolume) {
+                vpnVolumeSelection.style.display = 'none';
+                vpnUsageInstructions.style.display = 'block';
+            } else {
+                alert('لطفاً حجم کانفیگ را انتخاب کنید.');
+            }
+        });
+
+        // نمایش صفحه توضیحات نحوه خرید و استفاده از DNS پس از انتخاب لوکیشن
+        confirmDnsLocationBtn.addEventListener('click', function () {
+            const selectedLocation = dnsLocationSelect.value;
+            if (selectedLocation) {
+                dnsLocationSelection.style.display = 'none';
+                dnsUsageInstructions.style.display = 'block';
+            } else {
+                alert('لطفاً لوکیشن DNS را انتخاب کنید.');
+            }
+        });
+
+        // تابع برای باز کردن لینک در تلگرام و بستن مینی‌اپ
+        function goToTelegram(url) {
+            if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+                Telegram.WebApp.openTelegramLink(url); // باز کردن لینک در تلگرام
+                Telegram.WebApp.close(); // بستن مینی‌اپ
+            } else {
+                window.open(url, '_blank'); // اگر تلگرام وب‌اپ موجود نبود، در تب جدید باز شود
+            }
+        }
+
+        // اضافه کردن رویداد به دکمه‌ها
+        goToSupportBtn.addEventListener('click', () => goToTelegram('https://t.me/vee_config_bot'));
+        goToChannelBtn.addEventListener('click', () => goToTelegram('https://t.me/IR_KING_CHANEL'));
+        goToSupportChatBtn.addEventListener('click', () => goToTelegram('https://t.me/Vee_support'));
+        goToVpnSupportBtn.addEventListener('click', () => goToTelegram('https://t.me/vee_config_bot'));
+        goToVpnChannelBtn.addEventListener('click', () => goToTelegram('https://t.me/IR_KING_CHANEL'));
+        goToVpnSupportChatBtn.addEventListener('click', () => goToTelegram('https://t.me/Vee_support'));
+    });
+</script>
 </body>
 </html>
